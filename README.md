@@ -15,7 +15,7 @@ brew cask install miniconda
 
 2. Install the required packages:
 ````bash
-conda install -y pandas seaborn tensorflow keras matplotlib jupyter
+conda install -y pandas seaborn tensorflow==1.15 keras matplotlib jupyter
 ````
 
 3. Pre process the data
