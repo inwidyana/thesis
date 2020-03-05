@@ -134,7 +134,7 @@ def save_model(model, name):
 result = pd.read_csv('./result.csv')
 activations = ['relu', 'leaky_relu']
 optimizers = ['adam', 'sgd']
-identifier = 2
+identifier = 1
 nodes = 12
 attempts = 10
 counter = 1
