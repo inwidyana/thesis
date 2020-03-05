@@ -171,7 +171,7 @@ for optimizer in optimizers:
                     'optimizer': optimizer,
                     'learning_rate': 0.01,
                     'activation': activation,
-                    'epoch': 6000,
+                    'epoch': 1000,
                     'configuration': ('11-' + str(node) + '-1'),
                     'train': training_rmse,
                     'val': validation_rmse,
@@ -213,7 +213,7 @@ for optimizer in optimizers:
                     history = model.fit(
                         x=train,
                         y=train_labels,
-                        epochs=6000,
+                        epochs=1000,
                         validation_data=(test, test_labels),
                         verbose=0,  # Verbose had to be set to 0 due to google chrome crashing
                     )
@@ -227,7 +227,17 @@ for optimizer in optimizers:
                     training_rmse = sqrt(hist['loss'].iloc[-1])
                     validation_rmse = sqrt(hist['val_loss'].iloc[-1])
 
-                    new_row = {'id': identifier, 'optimizer': optimizer, 'learning_rate': 0.01, 'activation': activation, 'epoch': 6000, 'configuration': ('11-' + str(configuration) + '-1'), 'train': training_rmse, 'val': validation_rmse, 'data': 'all'}
+                    new_row = {
+                        'id': identifier, 
+                        'optimizer': optimizer, 
+                        'learning_rate': 0.01, 
+                        'activation': activation, 
+                        'epoch': 1000, 
+                        'configuration': ('11-' + str(configuration) + '-1'), 
+                        'train': training_rmse, 
+                        'val': validation_rmse, 
+                        'data': 'all'
+                    }
 
                     print(new_row)
 
