@@ -13,7 +13,7 @@ def delete_file(file_name):
     os.remove(file_name)
 
 #%%
-def get_yogyakarta_data(source_file, dest_file):
+def get_east_java_data(source_file, dest_file):
     with open(source_file) as source:
         source_data = csv.reader(source, delimiter=';')
         line_count = 0
@@ -91,8 +91,8 @@ create_file(tmp_temp_data_name)
 #%%
 
 # Filter out yogyakarta data from the dataset
-get_yogyakarta_data(pre_raw_data, pre_temp_data_name)
-get_yogyakarta_data(tmp_raw_data, tmp_temp_data_name)
+get_east_java_data(pre_raw_data, pre_temp_data_name)
+get_east_java_data(tmp_raw_data, tmp_temp_data_name)
 
 #%%
 
