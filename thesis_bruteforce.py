@@ -140,65 +140,7 @@ attempts = 10
 counter = 1
 
 iterations = len(activations) * len(optimizers) * nodes * attempts
-
-for optimizer in optimizers:
-    for activation in activations:
-        for node in range(1, nodes):
-            for i in range(0, attempts):
-                model = build_model([node], activation, optimizer)
-
-                """Fit model into training data then validate"""
-
-                history = model.fit(
-                    x=train,
-                    y=train_labels,
-                    epochs=1000,
-                    validation_data=(test, test_labels),
-                    verbose=0,  # Verbose had to be set to 0 due to google chrome crashing
-                )
-
-                hist = pd.DataFrame(history.history)
-                hist['epoch'] = history.epoch
-                hist.tail()
-
-                """Calculate and plot error"""
-
-                training_rmse = sqrt(hist['loss'].iloc[-1])
-                validation_rmse = sqrt(hist['val_loss'].iloc[-1])
-
-                new_row = {
-                    'id': identifier,
-                    'optimizer': optimizer,
-                    'learning_rate': 0.01,
-                    'activation': activation,
-                    'epoch': 1000,
-                    'configuration': ('11-' + str(node) + '-1'),
-                    'train': training_rmse,
-                    'val': validation_rmse,
-                    'data': 'all'
-                }
-
-                print(new_row)
-
-                should_save = (result.loc[(identifier), 'val'] > validation_rmse) if (
-                    len(result.index) >= (identifier + 1)) else True
-                new_model = (len(result.index) < (identifier + 1))
-
-                if (should_save):
-                    save_history(history, str(identifier))
-                    save_model(model, str(identifier))
-
-                    if (new_model):
-                        result = result.append(
-                            pd.DataFrame(new_row, index=[identifier]))
-                    else:
-                        result.update(pd.DataFrame(
-                            new_row, index=[identifier]))
-
-                    result.to_csv('./result.csv', header=True, index=False)
-                    print('Replace Model: ', identifier)
-
-            identifier = (identifier + 1)
+epoch = 1000
 
 for optimizer in optimizers:
     for activation in activations:
@@ -213,7 +155,7 @@ for optimizer in optimizers:
                     history = model.fit(
                         x=train,
                         y=train_labels,
-                        epochs=1000,
+                        epochs=epoch,
                         validation_data=(test, test_labels),
                         verbose=0,  # Verbose had to be set to 0 due to google chrome crashing
                     )
@@ -228,21 +170,25 @@ for optimizer in optimizers:
                     validation_rmse = sqrt(hist['val_loss'].iloc[-1])
 
                     new_row = {
-                        'id': identifier, 
-                        'optimizer': optimizer, 
-                        'learning_rate': 0.01, 
-                        'activation': activation, 
-                        'epoch': 1000, 
-                        'configuration': ('11-' + str(configuration) + '-1'), 
-                        'train': training_rmse, 
-                        'val': validation_rmse, 
+                        'id': identifier,
+                        'optimizer': optimizer,
+                        'learning_rate': 0.01,
+                        'activation': activation,
+                        'epoch': epoch,
+                        'configuration': ('11-' + str(configuration) + '-1'),
+                        'train': training_rmse,
+                        'val': validation_rmse,
                         'data': 'all'
                     }
 
                     print(new_row)
+                    # print(result)
 
-                    should_save = (result.loc[(identifier), 'val'] > validation_rmse) if (
-                        len(result.index) >= (identifier + 1)) else True
+                    if len(result.index) >= (identifier + 1):
+                        should_save = (result.iloc[identifier]['val'] > validation_rmse)
+                    else:
+                        should_save = True
+
                     new_model = (len(result.index) < (identifier + 1))
 
                     if (should_save):
